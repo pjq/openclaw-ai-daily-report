@@ -1,6 +1,6 @@
 #!/bin/bash
 # AI Daily Report - Deploy to Vercel via GitHub
-# Reads all JSON files in reports/ folder (one per day) and generates index.html
+# Generates index.html with all reports, showing latest 10 on home page with pagination
 
 set -e
 
@@ -16,28 +16,27 @@ if [ ! -d "$REPORT_DIR/reports" ]; then
     exit 0
 fi
 
-# Get latest report file (by modification time, or use today's if exists)
-LATEST_REPORT=""
-if [ -f "$REPORT_DIR/reports/$TODAY.json" ]; then
-    LATEST_REPORT="$REPORT_DIR/reports/$TODAY.json"
-else
-    LATEST_REPORT=$(ls -t "$REPORT_DIR/reports/"*.json 2>/dev/null | head -1)
-fi
+# Get all report files sorted by date (newest first)
+REPORT_FILES=$(ls -1t "$REPORT_DIR/reports/"*.json 2>/dev/null | head -10)
+LATEST_REPORT=$(echo "$REPORT_FILES" | head -1)
 
 if [ -z "$LATEST_REPORT" ]; then
     echo "No report files found."
     exit 0
 fi
 
-echo "Using report: $LATEST_REPORT"
+echo "Using latest report: $LATEST_REPORT"
 
 # Read from latest report
 DAILY_DATE=$(basename "$LATEST_REPORT" .json)
 POINTS=$(cat "$LATEST_REPORT" | jq -r '.points[]')
 SOURCES=$(cat "$LATEST_REPORT" | jq -r '.sources[]')
 
+# Get all reports for archive page
+ALL_REPORTS=$(ls -1 "$REPORT_DIR/reports/"*.json | sort -r)
+
 # Generate index.html
-cat > "$REPORT_DIR/index.html" << EOF
+cat > "$REPORT_DIR/index.html" << 'EOF'
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -88,18 +87,18 @@ cat > "$REPORT_DIR/index.html" << EOF
     
     <div class="nav">
       <a href="./">📰 每日简报</a>
-      <a href="./deep-research/" class="secondary">📚 深度研究</a>
+      <a href="./archive/">📚 往期简报</a>
+      <a href="./deep-research/" class="secondary">🔬 深度研究</a>
     </div>
-    
-    <div class="report-card">
-      <div class="report-date">$DAILY_DATE</div>
-      
-      <div class="report-section">
-        <h2>📰 热点要点</h2>
-        <ul>
 EOF
 
-# Add points
+# Add latest report section
+echo "    <div class=\"report-card\">" >> "$REPORT_DIR/index.html"
+echo "      <div class=\"report-date\">$DAILY_DATE</div>" >> "$REPORT_DIR/index.html"
+echo "      <div class=\"report-section\">" >> "$REPORT_DIR/index.html"
+echo "        <h2>📰 热点要点</h2>" >> "$REPORT_DIR/index.html"
+echo "        <ul>" >> "$REPORT_DIR/index.html"
+
 while IFS= read -r point; do
     echo "          <li>$point</li>" >> "$REPORT_DIR/index.html"
 done <<< "$POINTS"
@@ -113,7 +112,6 @@ cat >> "$REPORT_DIR/index.html" << 'EOF'
         <div class="sources">
 EOF
 
-# Add sources
 while IFS= read -r source; do
     hostname=$(echo "$source" | sed 's|https://||' | cut -d'/' -f1)
     echo "          <a href=\"$source\" target=\"_blank\">$hostname</a>" >> "$REPORT_DIR/index.html"
@@ -131,10 +129,9 @@ EOF
 
 # List deep research articles
 for article in "$REPORT_DIR/deep-research"/*.html; do
-    if [ -f "$article" ]; then
+    if [ -f "$article" ] && [ "$(basename "$article")" != "index.html" ]; then
         filename=$(basename "$article")
-        # Extract title from HTML
-        title=$(grep -o '<title>[^<]*</title>' "$article" | sed 's/<title>//;s/<\/title>//')
+        title=$(grep -o '<title>[^<]*</title>' "$article" | sed 's/<title>//;s/<\/title>//' | sed 's/ - 2026//')
         if [ -z "$title" ]; then
             title="$filename"
         fi
@@ -161,10 +158,173 @@ sed -i "s/TODAY_PLACEHOLDER/$TODAY/g" "$REPORT_DIR/index.html"
 
 echo "Generated index.html"
 
+# Generate archive page with all reports
+mkdir -p "$REPORT_DIR/archive"
+cat > "$REPORT_DIR/archive/index.html" << 'EOF'
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>往期简报 - AI Daily Report</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; background: #f5f5f5; min-height: 100vh; }
+    .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
+    header { text-align: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e0e0e0; }
+    header h1 { font-size: 2rem; color: #1a1a1a; margin-bottom: 0.5rem; }
+    header p { color: #666; font-size: 0.9rem; }
+    .back { display: inline-block; margin-bottom: 1rem; color: #0066cc; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    .archive-list { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .archive-item { padding: 1rem 0; border-bottom: 1px solid #eee; }
+    .archive-item:last-child { border-bottom: none; }
+    .archive-item a { font-size: 1.1rem; color: #0066cc; text-decoration: none; font-weight: 500; }
+    .archive-item a:hover { text-decoration: underline; }
+    .archive-item .date { font-size: 0.85rem; color: #888; margin-top: 0.3rem; }
+    .pagination { margin-top: 1.5rem; text-align: center; }
+    .pagination a { display: inline-block; margin: 0 0.3rem; padding: 0.5rem 1rem; background: #0066cc; color: white; border-radius: 20px; text-decoration: none; }
+    .pagination a:hover { background: #0055aa; }
+    .pagination .disabled { background: #ccc; pointer-events: none; }
+    footer { text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e0e0e0; color: #888; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="../" class="back">← 返回首页</a>
+    
+    <header>
+      <h1>📚 往期简报</h1>
+      <p>AI Daily Report Archive</p>
+    </header>
+    
+    <div class="archive-list">
+EOF
+
+# List all reports (newest first)
+count=0
+for report_file in $(ls -1t "$REPORT_DIR/reports/"*.json 2>/dev/null); do
+    report_date=$(basename "$report_file" .json)
+    count=$((count + 1))
+    # Get points summary
+    summary=$(cat "$report_file" | jq -r '.points[0]' | cut -c1-60)
+    if [ ${#summary} -gt 57 ]; then
+        summary="${summary}..."
+    fi
+    echo "      <div class=\"archive-item\">" >> "$REPORT_DIR/archive/index.html"
+    echo "        <a href=\"../reports/$report_date.html\">$report_date</a>" >> "$REPORT_DIR/archive/index.html"
+    echo "        <div class=\"date\">$summary</div>" >> "$REPORT_DIR/archive/index.html"
+    echo "      </div>" >> "$REPORT_DIR/archive/index.html"
+done
+
+cat >> "$REPORT_DIR/archive/index.html" << 'EOF'
+    </div>
+    
+    <div class="pagination">
+      <a href="./">1</a>
+    </div>
+    
+    <footer>
+      <p>🤖 OpenClaw AI</p>
+    </footer>
+  </div>
+</body>
+</html>
+EOF
+
+echo "Generated archive/index.html"
+
+# Generate individual report pages
+for report_file in "$REPORT_DIR/reports"/*.json; do
+    if [ -f "$report_file" ]; then
+        report_date=$(basename "$report_file" .json)
+        report_points=$(cat "$report_file" | jq -r '.points[]')
+        report_sources=$(cat "$report_file" | jq -r '.sources[]')
+        
+        cat > "$REPORT_DIR/reports/$report_date.html" << EOF
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Daily Report - $report_date</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; background: #f5f5f5; min-height: 100vh; }
+    .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
+    header { text-align: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e0e0e0; }
+    header h1 { font-size: 2rem; color: #1a1a1a; margin-bottom: 0.5rem; }
+    .back { display: inline-block; margin-bottom: 1rem; color: #0066cc; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    .report-card { background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .report-date { font-size: 0.85rem; color: #888; margin-bottom: 1rem; }
+    .report-section { margin-bottom: 1.5rem; }
+    .report-section h2 { font-size: 1.1rem; color: #2c3e50; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid #eee; }
+    .report-section ul { list-style: none; padding-left: 0; }
+    .report-section li { padding: 0.5rem 0; padding-left: 1.5rem; position: relative; }
+    .report-section li::before { content: "•"; position: absolute; left: 0; color: #0066cc; font-weight: bold; }
+    .sources { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .sources a { background: #f0f0f0; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; color: #555; text-decoration: none; }
+    .sources a:hover { background: #e0e0e0; }
+    footer { text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e0e0e0; color: #888; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="../" class="back">← 返回</a>
+    <a href="../../" class="back">首页</a>
+    
+    <header>
+      <h1>🤖 AI Daily Report</h1>
+    </header>
+    
+    <div class="report-card">
+      <div class="report-date">$report_date</div>
+      
+      <div class="report-section">
+        <h2>📰 热点要点</h2>
+        <ul>
+EOF
+
+        while IFS= read -r point; do
+            echo "          <li>$point</li>" >> "$REPORT_DIR/reports/$report_date.html"
+        done <<< "$report_points"
+
+        cat >> "$REPORT_DIR/reports/$report_date.html" << 'EOF'
+        </ul>
+      </div>
+      
+      <div class="report-section">
+        <h2>🔗 来源</h2>
+        <div class="sources">
+EOF
+
+        while IFS= read -r source; do
+            hostname=$(echo "$source" | sed 's|https://||' | cut -d'/' -f1)
+            echo "          <a href=\"$source\" target=\"_blank\">$hostname</a>" >> "$REPORT_DIR/reports/$report_date.html"
+        done <<< "$report_sources"
+
+        cat >> "$REPORT_DIR/reports/$report_date.html" << 'EOF'
+        </div>
+      </div>
+    </div>
+    
+    <footer>
+      <p>🤖 OpenClaw AI</p>
+    </footer>
+  </div>
+</body>
+</html>
+EOF
+    fi
+done
+
+echo "Generated individual report pages"
+
 # Commit and push
 cd "$REPORT_DIR"
-git add index.html reports/ deep-research/
-git commit -m "Update reports $TODAY" || echo "No changes"
+git add index.html archive/ reports/
+git commit -m "Update reports with archive and pagination $TODAY" || echo "No changes"
 git push origin main
 
-echo "Done! Vercel will auto-deploy."
+echo "=== Done! Vercel will auto-deploy ==="
