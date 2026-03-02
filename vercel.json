@@ -1,15 +1,5 @@
 {
-  "routes": [
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/archive",
-      "dest": "/archive/index.html"
-    },
-    {
-      "src": "/archive/",
-      "dest": "/archive/index.html"
-    }
-  ]
+  "github": {
+    "silent": true
+  }
 }
