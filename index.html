@@ -13,20 +13,30 @@
     header p { color: #666; font-size: 0.9rem; }
     .nav { margin-bottom: 1.5rem; text-align: center; }
     .nav a { display: inline-block; margin: 0 0.5rem; padding: 0.5rem 1rem; background: #0066cc; color: white; border-radius: 20px; text-decoration: none; font-size: 0.9rem; }
+    .nav a:hover { background: #0055aa; }
     .nav a.secondary { background: #666; }
+    .nav a.secondary:hover { background: #555; }
     .report-card { background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
     .report-date { font-size: 0.85rem; color: #888; margin-bottom: 1rem; }
     .report-section { margin-bottom: 1.5rem; }
+    .report-section:last-child { margin-bottom: 0; }
     .report-section h2 { font-size: 1.1rem; color: #2c3e50; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid #eee; }
     .report-section ul { list-style: none; padding-left: 0; }
     .report-section li { padding: 0.5rem 0; padding-left: 1.5rem; position: relative; }
     .report-section li::before { content: "•"; position: absolute; left: 0; color: #0066cc; font-weight: bold; }
     .sources { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-    .sources a { background: #f0f0f0; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; color: #555; }
-    .deep-section { border-left: 4px solid #0066cc; padding-left: 1rem; margin-top: 1rem; }
-    .deep-section h3 { font-size: 1rem; color: #1a1a1a; margin-bottom: 0.5rem; }
-    .deep-section h3 a { color: #0066cc; text-decoration: none; }
+    .sources a { background: #f0f0f0; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; color: #555; text-decoration: none; }
+    .sources a:hover { background: #e0e0e0; }
+    .deep-card { border-left: 4px solid #0066cc; padding: 1rem; margin-bottom: 1rem; background: #fafafa; border-radius: 0 8px 8px 0; }
+    .deep-card:last-child { margin-bottom: 0; }
+    .deep-card h3 { font-size: 1rem; color: #1a1a1a; margin-bottom: 0.5rem; }
+    .deep-card h3 a { color: #0066cc; text-decoration: none; font-weight: 600; }
+    .deep-card h3 a:hover { text-decoration: underline; }
+    .deep-card p { color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; }
+    .deep-card .tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+    .deep-card .tag { background: #e8f4fd; color: #0066cc; padding: 0.15rem 0.5rem; border-radius: 12px; font-size: 0.75rem; }
     footer { text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e0e0e0; color: #888; font-size: 0.85rem; }
+    @media (max-width: 600px) { .container { padding: 1rem; } }
   </style>
 </head>
 <body>
@@ -37,8 +47,8 @@
     </header>
     
     <div class="nav">
-      <a href="./">每日简报</a>
-      <a href="./deep-research/" class="secondary">深度研究</a>
+      <a href="./">📰 每日简报</a>
+      <a href="./deep-research/" class="secondary">📚 深度研究</a>
     </div>
     
     <div class="report-card">
@@ -59,9 +69,9 @@
         <h2>🔗 来源</h2>
         <div class="sources">
           <a href="https://blog.mean.ceo/new-ai-model-releases-news-march-2026/" target="_blank">blog.mean.ceo</a>
-          <a href="https://www.linkedin.com/pulse/ai-weekly-digest-march-2-2026-pa-media-jhcfe" target="_blank">LinkedIn</a>
-          <a href="https://techcrunch.com/2026/02/28/billion-dollar-infrastructure-deals-ai-boom-data-centers-openai-oracle-nvidia-microsoft-google-meta/" target="_blank">TechCrunch</a>
-          <a href="https://www.nytimes.com/2026/03/01/technology/anthropic-defense-dept-openai-talks.html" target="_blank">NYTimes</a>
+          <a href="https://www.linkedin.com/pulse/ai-weekly-digest-march-2-2026-pa-media-jhcfe" target="_blank">www.linkedin.com</a>
+          <a href="https://techcrunch.com/2026/02/28/billion-dollar-infrastructure-deals-ai-boom-data-centers-openai-oracle-nvidia-microsoft-google-meta/" target="_blank">techcrunch.com</a>
+          <a href="https://www.nytimes.com/2026/03/01/technology/anthropic-defense-dept-openai-talks.html" target="_blank">www.nytimes.com</a>
         </div>
       </div>
     </div>
@@ -70,16 +80,21 @@
       <div class="report-section">
         <h2>📚 深度研究</h2>
         
-        <div class="deep-section">
+        <div class="deep-card">
           <h3><a href="./deep-research/agent-memory-2026.html">→ AI Agent Memory 管理方案深度分析 (2026)</a></h3>
           <p>深入分析当前主流方案：Mem0、MemGPT、Letta、分层架构、2026最新研究趋势</p>
+          <div class="tags">
+            <span class="tag">深度研究</span>
+            <span class="tag">基础设施</span>
+            <span class="tag">Memory</span>
+          </div>
         </div>
         
       </div>
     </div>
     
     <footer>
-      <p>Powered by OpenClaw 🤖 | Updated: 2026-03-02</p>
+      <p>🤖 OpenClaw AI | Updated: 2026-03-02</p>
     </footer>
   </div>
 </body>
