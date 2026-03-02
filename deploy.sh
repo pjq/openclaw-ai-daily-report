@@ -1,26 +1,40 @@
 #!/bin/bash
 # AI Daily Report - Deploy to Vercel via GitHub
-# Reads from reports.json and generates index.html
+# Reads all JSON files in reports/ folder (one per day) and generates index.html
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPORT_DIR="$SCRIPT_DIR"
+TODAY=$(date +%Y-%m-%d)
 
 echo "=== AI Daily Report Deploy ==="
 
-# Check if we have report data
-if [ ! -f "$REPORT_DIR/reports.json" ]; then
-    echo "No reports.json found."
+# Check if reports directory exists
+if [ ! -d "$REPORT_DIR/reports" ]; then
+    echo "No reports directory found."
     exit 0
 fi
 
-TODAY=$(date +%Y-%m-%d)
+# Get latest report file (by modification time, or use today's if exists)
+LATEST_REPORT=""
+if [ -f "$REPORT_DIR/reports/$TODAY.json" ]; then
+    LATEST_REPORT="$REPORT_DIR/reports/$TODAY.json"
+else
+    LATEST_REPORT=$(ls -t "$REPORT_DIR/reports/"*.json 2>/dev/null | head -1)
+fi
 
-# Get data from JSON
-DAILY_DATE=$(cat "$REPORT_DIR/reports.json" | jq -r '.daily[0].date')
-POINTS=$(cat "$REPORT_DIR/reports.json" | jq -r '.daily[0].points[]')
-SOURCES=$(cat "$REPORT_DIR/reports.json" | jq -r '.daily[0].sources[]')
+if [ -z "$LATEST_REPORT" ]; then
+    echo "No report files found."
+    exit 0
+fi
+
+echo "Using report: $LATEST_REPORT"
+
+# Read from latest report
+DAILY_DATE=$(basename "$LATEST_REPORT" .json)
+POINTS=$(cat "$LATEST_REPORT" | jq -r '.points[]')
+SOURCES=$(cat "$LATEST_REPORT" | jq -r '.sources[]')
 
 # Generate index.html
 cat > "$REPORT_DIR/index.html" << EOF
@@ -90,7 +104,7 @@ while IFS= read -r point; do
     echo "          <li>$point</li>" >> "$REPORT_DIR/index.html"
 done <<< "$POINTS"
 
-cat >> "$REPORT_DIR/index.html" << EOF
+cat >> "$REPORT_DIR/index.html" << 'EOF'
         </ul>
       </div>
       
@@ -113,17 +127,24 @@ cat >> "$REPORT_DIR/index.html" << 'EOF'
     <div class="report-card">
       <div class="report-section">
         <h2>📚 深度研究</h2>
-        
-        <div class="deep-card">
-          <h3><a href="./deep-research/agent-memory-2026.html">→ AI Agent Memory 管理方案深度分析 (2026)</a></h3>
-          <p>深入分析当前主流方案：Mem0、MemGPT、Letta、分层架构、2026最新研究趋势</p>
-          <div class="tags">
-            <span class="tag">深度研究</span>
-            <span class="tag">基础设施</span>
-            <span class="tag">Memory</span>
-          </div>
-        </div>
-        
+EOF
+
+# List deep research articles
+for article in "$REPORT_DIR/deep-research"/*.html; do
+    if [ -f "$article" ]; then
+        filename=$(basename "$article")
+        # Extract title from HTML
+        title=$(grep -o '<title>[^<]*</title>' "$article" | sed 's/<title>//;s/<\/title>//')
+        if [ -z "$title" ]; then
+            title="$filename"
+        fi
+        echo "        <div class=\"deep-card\">" >> "$REPORT_DIR/index.html"
+        echo "          <h3><a href=\"./deep-research/$filename\">→ $title</a></h3>" >> "$REPORT_DIR/index.html"
+        echo "        </div>" >> "$REPORT_DIR/index.html"
+    fi
+done
+
+cat >> "$REPORT_DIR/index.html" << 'EOF'
       </div>
     </div>
     
@@ -135,14 +156,14 @@ cat >> "$REPORT_DIR/index.html" << 'EOF'
 </html>
 EOF
 
-# Replace placeholder with actual date
+# Replace placeholder
 sed -i "s/TODAY_PLACEHOLDER/$TODAY/g" "$REPORT_DIR/index.html"
 
 echo "Generated index.html"
 
 # Commit and push
 cd "$REPORT_DIR"
-git add index.html reports.json
+git add index.html reports/ deep-research/
 git commit -m "Update reports $TODAY" || echo "No changes"
 git push origin main
 
