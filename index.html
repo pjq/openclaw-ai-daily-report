@@ -11,6 +11,9 @@
     header { text-align: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e0e0e0; }
     header h1 { font-size: 2rem; color: #1a1a1a; margin-bottom: 0.5rem; }
     header p { color: #666; font-size: 0.9rem; }
+    .nav { margin-bottom: 1.5rem; text-align: center; }
+    .nav a { display: inline-block; margin: 0 0.5rem; padding: 0.5rem 1rem; background: #0066cc; color: white; border-radius: 20px; text-decoration: none; font-size: 0.9rem; }
+    .nav a.secondary { background: #666; }
     .report-card { background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
     .report-date { font-size: 0.85rem; color: #888; margin-bottom: 1rem; }
     .report-section { margin-bottom: 1.5rem; }
@@ -18,9 +21,11 @@
     .report-section ul { list-style: none; padding-left: 0; }
     .report-section li { padding: 0.5rem 0; padding-left: 1.5rem; position: relative; }
     .report-section li::before { content: "•"; position: absolute; left: 0; color: #0066cc; font-weight: bold; }
-    .report-section a { color: #0066cc; text-decoration: none; }
     .sources { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .sources a { background: #f0f0f0; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; color: #555; }
+    .deep-section { border-left: 4px solid #0066cc; padding-left: 1rem; margin-top: 1rem; }
+    .deep-section h3 { font-size: 1rem; color: #1a1a1a; margin-bottom: 0.5rem; }
+    .deep-section h3 a { color: #0066cc; text-decoration: none; }
     footer { text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e0e0e0; color: #888; font-size: 0.85rem; }
   </style>
 </head>
@@ -28,8 +33,13 @@
   <div class="container">
     <header>
       <h1>🤖 AI Daily Report</h1>
-      <p>每日AI简报</p>
+      <p>每日AI简报 + 深度研究</p>
     </header>
+    
+    <div class="nav">
+      <a href="./">每日简报</a>
+      <a href="./deep-research/" class="secondary">深度研究</a>
+    </div>
     
     <div class="report-card">
       <div class="report-date">2026-03-02</div>
@@ -37,10 +47,10 @@
       <div class="report-section">
         <h2>📰 热点要点</h2>
         <ul>
-          <li>中国AI模型崛起 - MiniMax M2.5 发布，性能接近 Claude Opus 4.6，价格更具竞争力</li>
-          <li>科技巨头AI投资 - 美国Big Tech计划2026年联合投资$6500亿用于AI基础设施</li>
-          <li>Nvidia财报亮眼 - Q4利润同比增长94%达$430亿，AI已达拐点</li>
-          <li>AI安全争议 - 4000名法国演员签署公开信，谴责AI是"有组织的掠夺"</li>
+          <li>中国AI模型崛起 - MiniMax M2.5 发布，性能接近 Claude Opus 4.6</li>
+          <li>科技巨头AI投资 - 美国Big Tech计划2026年联合投资$6500亿</li>
+          <li>Nvidia财报亮眼 - Q4利润同比增长94%达$430亿</li>
+          <li>AI安全争议 - 4000名法国演员签署公开信谴责AI</li>
           <li>AI应用新进展 - Particle播客摘要、Atlassian Jira集成Agent</li>
         </ul>
       </div>
@@ -56,8 +66,20 @@
       </div>
     </div>
     
+    <div class="report-card">
+      <div class="report-section">
+        <h2>📚 深度研究</h2>
+        
+        <div class="deep-section">
+          <h3><a href="./deep-research/agent-memory-2026.html">→ AI Agent Memory 管理方案深度分析 (2026)</a></h3>
+          <p>深入分析当前主流方案：Mem0、MemGPT、Letta、分层架构、2026最新研究趋势</p>
+        </div>
+        
+      </div>
+    </div>
+    
     <footer>
-      <p>Powered by OpenClaw 🤖</p>
+      <p>Powered by OpenClaw 🤖 | Updated: 2026-03-02</p>
     </footer>
   </div>
 </body>
