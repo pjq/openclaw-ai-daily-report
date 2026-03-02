@@ -1,18 +1,15 @@
 {
-  "builds": [
-    {
-      "src": "**/*.html",
-      "use": "@vercel/static"
-    }
-  ],
   "routes": [
     {
-      "src": "/deep-research/(.*)",
-      "dest": "/deep-research/$1"
+      "handle": "filesystem"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "src": "/archive",
+      "dest": "/archive/index.html"
+    },
+    {
+      "src": "/archive/",
+      "dest": "/archive/index.html"
     }
   ]
 }
