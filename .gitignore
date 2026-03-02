@@ -4,4 +4,3 @@ out/
 .vercel/
 *.log
 .DS_Store
-deploy.sh

@@ -1,0 +1,28 @@
+{
+  "daily": [
+    {
+      "date": "2026-03-02",
+      "points": [
+        "中国AI模型崛起 - MiniMax M2.5 发布，性能接近 Claude Opus 4.6",
+        "科技巨头AI投资 - 美国Big Tech计划2026年联合投资$6500亿",
+        "Nvidia财报亮眼 - Q4利润同比增长94%达$430亿",
+        "AI安全争议 - 4000名法国演员签署公开信谴责AI",
+        "AI应用新进展 - Particle播客摘要、Atlassian Jira集成Agent"
+      ],
+      "sources": [
+        "https://blog.mean.ceo/new-ai-model-releases-news-march-2026/",
+        "https://www.linkedin.com/pulse/ai-weekly-digest-march-2-2026-pa-media-jhcfe",
+        "https://techcrunch.com/2026/02/28/billion-dollar-infrastructure-deals-ai-boom-data-centers-openai-oracle-nvidia-microsoft-google-meta/",
+        "https://www.nytimes.com/2026/03/01/technology/anthropic-defense-dept-openai-talks.html"
+      ]
+    }
+  ],
+  "deepResearch": [
+    {
+      "title": "AI Agent Memory 管理方案深度分析 (2026)",
+      "desc": "深入分析当前主流方案：Mem0、MemGPT、Letta、分层架构、2026最新研究趋势",
+      "file": "agent-memory-2026.html",
+      "tags": ["深度研究", "基础设施", "Memory"]
+    }
+  ]
+}
