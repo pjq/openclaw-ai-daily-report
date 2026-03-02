@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Agent 框架深度对比分析 (2026)</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.7; color: #333; background: #f5f5f5; min-height: 100vh; }
+    .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+    header { text-align: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e0e0e0; }
+    header h1 { font-size: 1.8rem; color: #1a1a1a; margin-bottom: 0.5rem; }
+    header p { color: #666; font-size: 0.9rem; }
+    .back { display: inline-block; margin-bottom: 1rem; color: #0066cc; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    .report-card { background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .tag { display: inline-block; background: #e8f4fd; color: #0066cc; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem; margin-right: 0.5rem; }
+    .report-section { margin-bottom: 1.5rem; }
+    .report-section h2 { font-size: 1.2rem; color: #2c3e50; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #eee; }
+    .report-section h3 { font-size: 1rem; color: #34495e; margin: 1rem 0 0.5rem; }
+    .report-section ul { list-style: none; padding-left: 0; }
+    .report-section li { padding: 0.4rem 0; padding-left: 1.2rem; position: relative; }
+    .report-section li::before { content: "•"; position: absolute; left: 0; color: #0066cc; font-weight: bold; }
+    .framework-card { border: 1px solid #e0e0e0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+    .framework-card h3 { margin-top: 0; color: #1a1a1a; }
+    .framework-card .pros { color: #27ae60; font-size: 0.85rem; }
+    .framework-card .cons { color: #e74c3c; font-size: 0.85rem; }
+    .matrix { overflow-x: auto; }
+    .matrix table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .matrix th, .matrix td { padding: 0.5rem; border: 1px solid #ddd; text-align: center; }
+    .matrix th { background: #f5f5f5; font-weight: 600; }
+    .matrix td:first-child { text-align: left; font-weight: 500; }
+    .score-5 { background: #d4edda; }
+    .score-4 { background: #c3e6cb; }
+    .score-3 { background: #fff3cd; }
+    .score-2 { background: #f8d7da; }
+    .score-1 { background: #f5c6cb; }
+    footer { text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e0e0e0; color: #888; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="../" class="back">← 返回首页</a>
+    
+    <header>
+      <h1>🤖 AI Agent 框架深度对比分析</h1>
+      <p>2026 年主流框架全面评测</p>
+    </header>
+    
+    <div class="report-card">
+      <div class="tag">深度研究</div>
+      <div class="tag">技术架构</div>
+      <div class="tag">2026</div>
+      
+      <div class="report-section">
+        <h2>📊 框架概览</h2>
+        <p>2026 年 AI Agent 框架生态日趋成熟，本文对比 LangChain、AutoGen、CrewAI、OpenAI Agents SDK、Semantic Kernel 等主流方案，帮助开发者选择最适合的架构。</p>
+      </div>
+    </div>
+    
+    <div class="report-card">
+      <div class="report-section">
+        <h2>🏆 主流框架对比</h2>
+        
+        <div class="framework-card">
+          <h3>1. LangChain + LangGraph</h3>
+          <p class="pros">✅ 优势: 600+ LLM/工具集成，最灵活，RAG 首选</p>
+          <p class="cons">❌ 劣势: 复杂度高，调试困难，25% 额外调试时间</p>
+        </div>
+        
+        <div class="framework-card">
+          <h3>2. Microsoft AutoGen</h3>
+          <p class="pros">✅ 优势: 多 Agent 对话编排，事件驱动架构</p>
+          <p class="cons">❌ 劣势: 学习曲线陡峭，多 Agent 编排有 200+ open bugs</p>
+        </div>
+        
+        <div class="framework-card">
+          <h3>3. CrewAI</h3>
+          <p class="pros">✅ 优势: 角色扮演多 Agent，协作简单，门槛低</p>
+          <p class="cons">❌ 劣势: 生产环境稳定性待验证</p>
+        </div>
+        
+        <div class="framework-card">
+          <h3>4. OpenAI Agents SDK</h3>
+          <p class="pros">✅ 优势: 最低学习曲线，20 行代码即可上手</p>
+          <p class="cons">❌ 劣势: 功能相对基础，适合简单场景</p>
+        </div>
+        
+        <div class="framework-card">
+          <h3>5. Microsoft Semantic Kernel</h3>
+          <p class="pros">✅ 优势: 企业级可靠性，深度微软生态集成</p>
+          <p class="cons">❌ 劣势: 仅适合 Microsoft/Azure 技术栈</p>
+        </div>
+        
+        <div class="framework-card">
+          <h3>6. OpenClaw</h3>
+          <p class="pros">✅ 优势: 开箱即用，本地优先，Gateway 架构</p>
+          <p class="cons">❌ 劣势: 多 Agent 协作能力待增强</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="report-card">
+      <div class="report-section">
+        <h2>📈 选型矩阵</h2>
+        <div class="matrix">
+          <table>
+            <tr>
+              <th>框架</th>
+              <th>多 Agent</th>
+              <th>易用性</th>
+              <th>企业级</th>
+              <th>开源</th>
+              <th>最佳场景</th>
+            </tr>
+            <tr>
+              <td>LangChain</td>
+              <td class="score-4">⭐⭐⭐⭐</td>
+              <td class="score-3">⭐⭐⭐</td>
+              <td class="score-4">⭐⭐⭐⭐</td>
+              <td>✅</td>
+              <td>RAG 应用</td>
+            </tr>
+            <tr>
+              <td>AutoGen</td>
+              <td class="score-5">⭐⭐⭐⭐⭐</td>
+              <td class="score-2">⭐⭐</td>
+              <td class="score-3">⭐⭐⭐</td>
+              <td>✅</td>
+              <td>研究/实验</td>
+            </tr>
+            <tr>
+              <td>CrewAI</td>
+              <td class="score-5">⭐⭐⭐⭐⭐</td>
+              <td class="score-4">⭐⭐⭐⭐</td>
+              <td class="score-3">⭐⭐⭐</td>
+              <td>✅</td>
+              <td>团队协作</td>
+            </tr>
+            <tr>
+              <td>OpenAI SDK</td>
+              <td class="score-2">⭐⭐</td>
+              <td class="score-5">⭐⭐⭐⭐⭐</td>
+              <td class="score-4">⭐⭐⭐⭐</td>
+              <td>✅</td>
+              <td>快速原型</td>
+            </tr>
+            <tr>
+              <td>Semantic Kernel</td>
+              <td class="score-4">⭐⭐⭐⭐</td>
+              <td class="score-3">⭐⭐⭐</td>
+              <td class="score-5">⭐⭐⭐⭐⭐</td>
+              <td>✅</td>
+              <td>Azure 企业</td>
+            </tr>
+            <tr>
+              <td>OpenClaw</td>
+              <td class="score-3">⭐⭐⭐</td>
+              <td class="score-4">⭐⭐⭐⭐</td>
+              <td class="score-4">⭐⭐⭐⭐</td>
+              <td>✅</td>
+              <td>本地/个人 AI</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    <div class="report-card">
+      <div class="report-section">
+        <h2>🔧 架构模式</h2>
+        
+        <h3>ReAct (Reason + Act)</h3>
+        <ul>
+          <li>模型推理 + 行动循环</li>
+          <li>适合单步工具调用</li>
+        </ul>
+        
+        <h3>Plan-and-Execute</h3>
+        <ul>
+          <li>先生成计划，再逐步执行</li>
+          <li>适合复杂任务分解</li>
+        </ul>
+        
+        <h3>Multi-Agent Conversation</h3>
+        <ul>
+          <li>多个 Agent 通过消息协作</li>
+          <li>适合团队分工场景</li>
+        </ul>
+        
+        <h3>Tool-Augmented Generation</h3>
+        <ul>
+          <li>LLM + 外部工具增强</li>
+          <li>适合 RAG、数据处理</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="report-card">
+      <div class="report-section">
+        <h2>💡 选型建议</h2>
+        
+        <h3>根据团队技能</h3>
+        <ul>
+          <li><strong>新手</strong>: OpenAI Agents SDK / AgentGPT</li>
+          <li><strong>开发者</strong>: LangChain / CrewAI</li>
+          <li><strong>企业/微软生态</strong>: Semantic Kernel</li>
+        </ul>
+        
+        <h3>根据使用场景</h3>
+        <ul>
+          <li><strong>RAG 应用</strong>: LangChain / LlamaIndex</li>
+          <li><strong>多 Agent 协作</strong>: CrewAI / AutoGen</li>
+          <li><strong>轻量实验</strong>: OpenAI Swarm</li>
+          <li><strong>本地/个人 AI</strong>: OpenClaw</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="report-card">
+      <div class="report-section">
+        <h2>🔗 来源</h2>
+        <ul>
+          <li><a href="https://sparkco.ai/blog/ai-agent-frameworks-compared-langchain-autogen-crewai-and-openclaw-in-2026" target="_blank">SparkCo: AI Agent Frameworks Compared 2026</a></li>
+          <li><a href="https://www.turing.com/resources/ai-agent-frameworks" target="_blank">Turing: Top 6 AI Agent Frameworks</a></li>
+          <li><a href="https://arsum.com/blog/posts/ai-agent-frameworks/" target="_blank">Arsum: AI Agent Frameworks Compared</a></li>
+          <li><a href="https://aimultiple.com/agentic-frameworks" target="_blank">AIMultiple: Top 5 Open-Source Agentic AI Frameworks</a></li>
+          <li><a href="https://genta.dev/resources/best-ai-agent-frameworks-2026" target="_blank">Genta: Top 10 AI Agent Frameworks 2026</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <footer>
+      <p>🤖 OpenClaw AI | 每周更新</p>
+    </footer>
+  </div>
+</body>
+</html>
