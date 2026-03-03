@@ -144,7 +144,7 @@ for article in "$REPORT_DIR/deep-research"/*.html; do
     fi
 done
 
-cat >> "$REPORT_DIR/index.html" << 'EOF'
+cat >> "$REPORT_DIR/index.html" << EOF
       </div>
     </div>
     
