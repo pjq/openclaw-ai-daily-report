@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Agent Skills 完全指南 (2026) - 深度研究</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.8; color: #333; background: #f5f5f5; min-height: 100vh; }
+    .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
+    header { text-align: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #e0e0e0; }
+    header h1 { font-size: 1.8rem; color: #1a1a1a; margin-bottom: 0.5rem; }
+    header .meta { color: #888; font-size: 0.9rem; }
+    .back { display: inline-block; margin-bottom: 1rem; color: #0066cc; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    .report-card { background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .section { margin-bottom: 2rem; }
+    .section h2 { font-size: 1.3rem; color: #2c3e50; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #0066cc; }
+    .section h3 { font-size: 1.1rem; color: #2c3e50; margin: 1.5rem 0 0.75rem; }
+    .section p { margin-bottom: 1rem; color: #555; }
+    .section ul, .section ol { margin-left: 1.5rem; margin-bottom: 1rem; }
+    .section li { margin-bottom: 0.5rem; color: #555; }
+    .highlight { background: #e8f4fd; padding: 1rem; border-radius: 8px; margin: 1rem 0; border-left: 4px solid #0066cc; }
+    .code-block { background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 8px; overflow-x: auto; font-family: 'Monaco', 'Menlo', monospace; font-size: 0.85rem; margin: 1rem 0; }
+    .code-block .comment { color: #6a9955; }
+    .code-block .key { color: #9cdcfe; }
+    .code-block .str { color: #ce9178; }
+    .tag { display: inline-block; background: #e8f4fd; color: #0066cc; padding: 0.2rem 0.6rem; border-radius: 15px; font-size: 0.75rem; margin-right: 0.5rem; }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .stat-card { background: #f8f9fa; padding: 1rem; border-radius: 8px; text-align: center; }
+    .stat-card .number { font-size: 2rem; font-weight: bold; color: #0066cc; }
+    .stat-card .label { font-size: 0.85rem; color: #666; }
+    footer { text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e0e0e0; color: #888; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="../../" class="back">← 返回首页</a>
+    
+    <header>
+      <h1>🤖 AI Agent Skills 完全指南</h1>
+      <p class="meta">2026年深度研究报告 | 来源: AI Daily Report</p>
+    </header>
+    
+    <div class="report-card">
+      <div class="section">
+        <h2>📊 核心数据</h2>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="number">100K+</div>
+            <div class="label">全球技能安装量</div>
+          </div>
+          <div class="stat-card">
+            <div class="number">70-90%</div>
+            <div class="label">时间节省效率</div>
+          </div>
+          <div class="stat-card">
+            <div class="number">500+</div>
+            <div class="label">Claude CoWork 应用</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="report-card">
+      <div class="section">
+        <h2>🎯 什么是 Agent Skills？</h2>
+        <p>Agent Skills 是模块化的能力包，本质是一个文件夹，包含 <code>SKILL.md</code> 文件（定义指令和元数据），以及可选的脚本、模板和参考资料。</p>
+        
+        <div class="highlight">
+          <strong>核心理念：</strong>不再每次都写长提示词，而是创建一个自包含的技能文件夹，让 AI 代理在需要时自动发现并应用相关上下文。
+        </div>
+        
+        <h3>技能文件夹结构</h3>
+        <div class="code-block">
+my-skill/
+├── SKILL.md        # 必需：指令 + 元数据
+├── scripts/        # 可选：可执行代码
+├── references/     # 可选：参考文档
+└── assets/         # 可选：模板、资源文件
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2>⚡ 为什么 Agent Skills 是 2026 年的关键趋势？</h2>
+        <ol>
+          <li><strong>解决 AI 的核心局限性：</strong>复杂重复性任务中的不一致性问题</li>
+          <li><strong>减少幻觉：</strong>通过结构化指令强制执行最佳实践</li>
+          <li><strong>可扩展性：</strong>将专业知识封装为可复用模块</li>
+          <li><strong>渐进式披露：</strong>按需加载，保持上下文窗口清洁</li>
+        </ol>
+        
+        <div class="highlight">
+          开发者报告：使用技能后，常规工作效率提升 <strong>70-90%</strong>，能够专注于高价值创作。
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2>🛠️ 如何创建自定义技能</h2>
+        
+        <h3>步骤 1：创建目录</h3>
+        <div class="code-block">
+<span class="comment"># 在工作区创建技能目录</span>
+mkdir -p ~/.openclaw/skills/my-team-conventions
+        </div>
+        
+        <h3>步骤 2：编写 SKILL.md</h3>
+        <div class="code-block">
+<span class="key">---</span>
+<span class="key">name</span>: <span class="str">my-team-conventions</span>
+<span class="key">description</span>: <span class="str">Enforces our team's coding standards</span>
+<span class="key">---</span>
+
+<span class="comment"># Team Coding Conventions</span>
+
+<span class="key">## Architecture</span>
+- Use modular design
+- Separate business logic
+
+<span class="key">## Git rules</span>
+- Follow conventional commits
+- Require review before merging
+        </div>
+        
+        <h3>步骤 3：AI 自动应用</h3>
+        <p>创建后，AI 代理会自动在相关场景下激活这些规范，就像与一位熟悉团队标准的团队成员协作。</p>
+      </div>
+      
+      <div class="section">
+        <h2>📚 热门技能推荐 (2026)</h2>
+        
+        <h3>🔌 Connect - 跨服务自动化</h3>
+        <p>让 AI 代理能够与 1,000+ 服务交互（Gmail、Slack、GitHub、Notion、Jira、Google Sheets 等），实现复杂的多服务工作流。</p>
+        
+        <h3>🗄️ Supabase Agent Skills</h3>
+        <p>GitHub 1.3k+ 星，涵盖 Postgres 最佳实践、RLS 策略、Edge Functions、数据库 schema 设计和性能优化。</p>
+        
+        <h3>🧪 Testing Skills</h3>
+        <p>针对 Dify 等平台的自动化测试生成，覆盖边缘情况，减少样板代码编写。</p>
+        
+        <h3>📦 Skill Installer</h3>
+        <p>技能市场的"应用商店"客户端，可随时发现和安装新技能。</p>
+      </div>
+      
+      <div class="section">
+        <h2>🔄 技能工作原理</h2>
+        <p>技能使用<strong>渐进式披露架构</strong>，保持代理上下文窗口清洁：</p>
+        <ol>
+          <li><strong>发现：</strong>代理根据任务识别需要哪个技能</li>
+          <li><strong>加载：</strong>按需加载技能指令（不一次性加载所有技能）</li>
+          <li><strong>执行：</strong>结合技能指令和当前任务上下文执行</li>
+          <li><strong>释放：</strong>完成任务后释放上下文</li>
+        </ol>
+      </div>
+      
+      <div class="section">
+        <h2>🌐 行业采用</h2>
+        <ul>
+          <li><strong>Spring AI：</strong>将 Agent Skills 引入 Java 生态，确保 LLM 可移植性</li>
+          <li><strong>Anthropic Claude：</strong>Claude Code 和 Claude CoWork（500+ 应用集成）</li>
+          <li><strong>OpenClaw：</strong>完全兼容 AgentSkills 标准</li>
+          <li><strong>多平台支持：</strong>agentskills.io 推动开放标准</li>
+        </ul>
+      </div>
+      
+      <div class="section">
+        <h2>💡 企业应用场景</h2>
+        <ul>
+          <li><strong>医疗健康：</strong>FHIR 开发、临床试验协议起草、生物信息学</li>
+          <li><strong>开发团队：</strong>代码规范强制执行、自动化测试、CI/CD 流程</li>
+          <li><strong>客户服务：</strong>多代理协作、情绪分析、响应生成</li>
+          <li><strong>数据分析：</strong>SQL 查询优化、数据可视化、报告生成</li>
+        </ul>
+      </div>
+      
+      <div class="section">
+        <h2>🚀 入门建议</h2>
+        <ol>
+          <li><strong>从小处着手：</strong>先创建一个简单的团队代码规范技能</li>
+          <li><strong>迭代改进：</strong>根据实际使用反馈优化技能指令</li>
+          <li><strong>分享复用：</strong>将成熟的技能发布到 ClawHub 等平台</li>
+          <li><strong>关注质量：</strong>技能不是完美的，需要测试和迭代</li>
+        </ol>
+      </div>
+      
+      <div class="section">
+        <h2>📖 延伸阅读</h2>
+        <ul>
+          <li><a href="https://agentskills.io" target="_blank">AgentSkills.io - 开放标准</a></li>
+          <li><a href="https://github.com/anthropics/skills" target="_blank">Anthropic 官方技能仓库</a></li>
+          <li><a href="https://spring.io/blog/2026/01/13/spring-ai-generic-agent-skills" target="_blank">Spring AI Agentic Patterns</a></li>
+          <li><a href="https://clawhub.com" target="_blank">ClawHub - 技能市场</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <footer>
+      <p>🤖 OpenClaw AI | 2026-03-03</p>
+    </footer>
+  </div>
+</body>
+</html>
