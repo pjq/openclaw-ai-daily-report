@@ -1,0 +1,17 @@
+{
+  "points": [
+    "Anthropic挑战五角大楼供应链风险标签：Anthropic因被美国国防部列为供应链风险而起诉，Microsoft、Google、Amazon表示Claude将继续向非国防客户提供服务",
+    "WhatsApp向第三方AI聊天机器人开放：继欧洲之后，Meta允许巴西用户使用第三方AI聊天机器人，但开发者抱怨Meta的定价过高",
+    "OpenAI发布GPT-5.4：新增原生计算机使用模式和财务插件，专注于编程和专业工作流程，直接对标Anthropic的Claude Code",
+    "Netflix收购Ben Affleck的AI初创公司：进一步扩展AI娱乐领域布局",
+    "Meta AI眼镜隐私争议：据报道Meta AI眼镜向肯尼亚的人工审核员发送敏感视频片段"
+  ],
+  "sources": [
+    "https://techcrunch.com/2026/03/05/anthropic-to-challenge-dods-supply-chain-label-in-court/",
+    "https://techcrunch.com/2026/03/06/after-europe-whatsapp-will-let-rival-ai-companies-offer-chatbots-in-brazil/",
+    "https://venturebeat.com/technology/openai-launches-gpt-5-4-with-native-computer-use-mode-financial-plugins-for",
+    "https://www.theverge.com/ai-artificial-intelligence/890460/anthropic-responds-pentagon-supply-chain-risk",
+    "https://www.trendingtopics.eu/gpt-5-4-targets-anthropics-claude-with-premium-pricing-and-coding-muscle/"
+  ],
+  "generatedAt": "08:03"
+}
