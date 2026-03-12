@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Analytics } from '@vercel/analytics/next';
 
@@ -13,45 +13,35 @@ export async function getStaticProps() {
     const slug = filename.replace('.md', '');
     const markdown = fs.readFileSync(path.join(REPORTS_DIR, filename), 'utf-8');
     const { data, content } = matter(markdown);
-    return {
-      slug,
-      title: data.title || slug,
-      date: data.date || '',
-      ...data,
-      content
-    };
+    return { slug, title: data.title || slug, date: data.date || '', ...data, content };
   }).sort((a, b) => new Date(b.date) - new Date(a.date));
-
   return { props: { reports } };
 }
 
-// Note: SEO metadata is in pages/_document.js
-
-// Cyberpunk theme colors
 const theme = {
-  bg: '#0a0a0f',
-  cardBg: '#12121a',
-  border: '#1f1f3a',
-  primary: '#00ffff',
-  secondary: '#ff00ff',
-  accent: '#39ff14',
-  text: '#e0e0e0',
-  muted: '#8888aa',
+  bg: '#0a0a0f', cardBg: '#12121a', border: '#1f1f3a',
+  primary: '#00ffff', secondary: '#ff00ff', accent: '#39ff14',
+  text: '#e0e0e0', muted: '#8888aa',
   gradient: 'linear-gradient(135deg, #00ffff 0%, #ff00ff 100%)',
 };
 
 export default function Home({ reports = [] }) {
   const [selected, setSelected] = useState(reports[0]?.slug || null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const currentReport = reports.find(r => r.slug === selected) || reports[0];
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   if (!reports.length) {
     return (
       <div style={{ background: theme.bg, minHeight: '100vh', color: theme.text, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Courier New', monospace", padding: '20px' }}>
-        <div style={{ textAlign: 'center' }}>
-          <h1 style={{ color: theme.primary, textShadow: `0 0 20px ${theme.primary}`, fontSize: '1.5rem' }}>═══ NO DATA ═══</h1>
-          <p style={{ color: theme.muted, fontSize: '0.9rem' }}>// System awaiting input...</p>
-        </div>
+        <div style={{ textAlign: 'center' }}><h1 style={{ color: theme.primary, textShadow: `0 0 20px ${theme.primary}`, fontSize: '1.5rem' }}>═══ NO DATA ═══</h1><p style={{ color: theme.muted }}>// System awaiting input...</p></div>
       </div>
     );
   }
@@ -59,41 +49,50 @@ export default function Home({ reports = [] }) {
   return (
     <div style={{ background: theme.bg, minHeight: '100vh', color: theme.text, fontFamily: "'Courier New', 'Consolas', monospace" }}>
       <Analytics />
-      
-      {/* Scanline overlay */}
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,255,0.03) 2px, rgba(0,255,255,0.03) 4px)', pointerEvents: 'none', zIndex: 1000 }} />
 
-      {/* Mobile menu button */}
-      <button onClick={() => setMenuOpen(!menuOpen)} className="menu-toggle" style={{ display: 'none', position: 'fixed', bottom: '20px', right: '20px', width: '50px', height: '50px', borderRadius: '25px', background: theme.gradient, border: 'none', color: '#fff', fontSize: '24px', cursor: 'pointer', zIndex: 1001, boxShadow: `0 0 20px ${theme.primary}`, alignItems: 'center', justifyContent: 'center' }}>☰</button>
+      {/* Mobile hamburger button - only show on mobile */}
+      {isMobile && (
+        <button onClick={() => setMenuOpen(!menuOpen)} style={{ display: 'flex', position: 'fixed', bottom: '20px', right: '20px', width: '50px', height: '50px', borderRadius: '25px', background: theme.gradient, border: 'none', color: '#fff', fontSize: '24px', cursor: 'pointer', zIndex: 1001, boxShadow: `0 0 20px ${theme.primary}`, alignItems: 'center', justifyContent: 'center' }}>
+          {menuOpen ? '✕' : '☰'}
+        </button>
+      )}
 
       {/* Mobile overlay */}
-      {menuOpen && <div onClick={() => setMenuOpen(false)} style={{ display: 'block', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', zIndex: 1001 }} />}
+      {isMobile && menuOpen && <div onClick={() => setMenuOpen(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', zIndex: 1001 }} />}
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '30px', position: 'relative' }}>
-        {/* Header */}
         <header style={{ borderBottom: `2px solid ${theme.border}`, paddingBottom: '25px', marginBottom: '30px', position: 'relative' }}>
           <div style={{ position: 'absolute', top: -10, left: 0, right: 0, height: '2px', background: theme.gradient, opacity: 0.7 }} />
           <h1 style={{ margin: 0, fontSize: '2.5rem', background: theme.gradient, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', filter: 'drop-shadow(0 0 10px rgba(0,255,255,0.5))', letterSpacing: '4px' }}>◇ AI DAILY REPORT</h1>
           <p style={{ color: theme.muted, margin: '10px 0 0', fontSize: '0.9rem', letterSpacing: '2px' }}>// DAILY AI INTELLIGENCE BRIEF</p>
-          <div style={{ position: 'absolute', top: 0, right: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: theme.accent, boxShadow: `0 0 10px ${theme.accent}`, animation: 'pulse 2s infinite' }} />
-            <span style={{ color: theme.accent, fontSize: '0.8rem' }}>ONLINE</span>
-          </div>
+          {!isMobile && <div style={{ position: 'absolute', top: 0, right: 0, display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ width: '8px', height: '8px', borderRadius: '50%', background: theme.accent, boxShadow: `0 0 10px ${theme.accent}`, animation: 'pulse 2s infinite' }} /><span style={{ color: theme.accent, fontSize: '0.8rem' }}>ONLINE</span></div>}
         </header>
 
-        {/* Main content */}
-        <div className="main-grid" style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: '30px' }}>
-          {/* Sidebar */}
-          <nav className={`sidebar ${menuOpen ? 'open' : ''}`} style={{ background: theme.cardBg, border: `1px solid ${theme.border}`, borderRadius: '8px', padding: '20px', height: 'fit-content', position: 'sticky', top: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '280px 1fr', gap: isMobile ? '15px' : '30px' }}>
+          {/* Sidebar - on mobile it's an overlay when open, on desktop it's normal */}
+          <nav style={{
+            background: theme.cardBg,
+            border: `1px solid ${theme.border}`,
+            borderRadius: '8px',
+            padding: '20px',
+            height: 'fit-content',
+            position: isMobile ? 'fixed' : 'sticky',
+            top: isMobile ? (menuOpen ? '0' : '-100%') : '20px',
+            left: isMobile ? '0' : 'auto',
+            width: isMobile ? '85%' : '280px',
+            maxWidth: isMobile ? '300px' : 'auto',
+            height: isMobile ? '100vh' : 'fit-content',
+            zIndex: isMobile ? 1002 : 'auto',
+            transition: 'top 0.3s ease',
+            overflowY: 'auto'
+          }}>
             <h3 style={{ marginTop: 0, color: theme.secondary, fontSize: '0.85rem', letterSpacing: '3px', borderBottom: `1px solid ${theme.border}`, paddingBottom: '15px', marginBottom: '15px' }}>▸ TRANSMISSIONS</h3>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {reports.map((report) => (
                 <li key={report.slug} style={{ marginBottom: '8px' }}>
-                  <button onClick={() => { setSelected(report.slug); setMenuOpen(false); }} style={{ width: '100%', textAlign: 'left', padding: '12px', border: selected === report.slug ? `1px solid ${theme.primary}` : '1px solid transparent', background: selected === report.slug ? 'rgba(0,255,255,0.1)' : 'transparent', borderRadius: '4px', cursor: 'pointer', fontSize: '13px', color: selected === report.slug ? theme.primary : theme.text, fontFamily: 'inherit', transition: 'all 0.2s', boxShadow: selected === report.slug ? `0 0 15px rgba(0,255,255,0.2)` : 'none' }}>
-                    <div style={{ fontWeight: '600', marginBottom: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '180px' }}>{report.title}</span>
-                      <span style={{ color: theme.secondary, fontSize: '0.7rem' }}>◆</span>
-                    </div>
+                  <button onClick={() => { setSelected(report.slug); if (isMobile) setMenuOpen(false); }} style={{ width: '100%', textAlign: 'left', padding: '12px', border: selected === report.slug ? `1px solid ${theme.primary}` : '1px solid transparent', background: selected === report.slug ? 'rgba(0,255,255,0.1)' : 'transparent', borderRadius: '4px', cursor: 'pointer', fontSize: '13px', color: selected === report.slug ? theme.primary : theme.text, fontFamily: 'inherit', transition: 'all 0.2s', boxShadow: selected === report.slug ? `0 0 15px rgba(0,255,255,0.2)` : 'none' }}>
+                    <div style={{ fontWeight: '600', marginBottom: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: isMobile ? '200px' : '180px' }}>{report.title}</span><span style={{ color: theme.secondary, fontSize: '0.7rem' }}>◆</span></div>
                     <div style={{ fontSize: '11px', color: theme.muted, letterSpacing: '1px' }}>// {report.date}</div>
                   </button>
                 </li>
@@ -101,7 +100,6 @@ export default function Home({ reports = [] }) {
             </ul>
           </nav>
 
-          {/* Main content area */}
           <main>
             {currentReport && (
               <article style={{ background: theme.cardBg, border: `1px solid ${theme.border}`, borderRadius: '8px', padding: '30px', position: 'relative', overflow: 'hidden' }}>
@@ -121,12 +119,6 @@ export default function Home({ reports = [] }) {
                     article ul, article ol { padding-left: 20px; }
                     article li { margin-bottom: 8px; }
                     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; }
-                    @media (max-width: 768px) {
-                      .main-grid { grid-template-columns: 1fr !important; gap: 15px !important; }
-                      .sidebar { position: fixed !important; top: 0 !important; left: 0 !important; width: 85% !important; max-width: 300px !important; height: 100vh !important; z-index: 1002 !important; border-radius: 0 8px 8px 0 !important; transform: translateX(-100%) !important; transition: transform 0.3s ease !important; overflow-y: auto !important; }
-                      .sidebar.open { transform: translateX(0) !important; }
-                      .menu-toggle { display: flex !important; }
-                    }
                   `}</style>
                   <ReactMarkdown>{currentReport.content}</ReactMarkdown>
                 </div>
@@ -135,7 +127,6 @@ export default function Home({ reports = [] }) {
           </main>
         </div>
 
-        {/* Footer */}
         <footer style={{ marginTop: '40px', paddingTop: '20px', borderTop: `1px solid ${theme.border}`, textAlign: 'center', color: theme.muted, fontSize: '0.8rem', letterSpacing: '2px' }}>
           <span style={{ color: theme.primary }}>◇</span> AI DAILY REPORT v1.0 <span style={{ color: theme.secondary }}>//</span> DAILY TECH BRIEF <span style={{ color: theme.accent }}>//</span> EST. 2026
         </footer>
