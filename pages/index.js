@@ -3,6 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { Analytics } from '@vercel/analytics/next';
 
 const REPORTS_DIR = path.join(process.cwd(), 'reports');
 
@@ -69,6 +70,7 @@ export default function Home({ reports = [] }) {
       color: theme.text,
       fontFamily: "'Courier New', 'Consolas', monospace",
     }}>
+      <Analytics />
       {/* Scanline overlay */}
       <div style={{
         position: 'fixed',
