@@ -4,7 +4,7 @@ import matter from 'gray-matter';
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-const REPORTS_DIR = path.join(process.cwd(), 'markdown_reports');
+const REPORTS_DIR = path.join(process.cwd(), 'reports');
 
 export async function getStaticProps() {
   const files = fs.readdirSync(REPORTS_DIR).filter(f => f.endsWith('.md'));
